@@ -2,7 +2,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
-\title{Como fazer consultas em bancos de dados relacionais sem conhecer SQL?}
+
+
+% Keywords command
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} 
+}
+
+\title{Como fazer consultas a bancos de dados relacionais sem conhecer SQL?}
 \author{Henrique Bueno Rodrigues}
 \date{November 2018}
 
@@ -13,47 +22,45 @@
 
 \maketitle
 \begin{abstract}
-Apesar do advento de tecnologias não convencionais de bancos de dados, por exemplo, Hadoop e NoSQL, ainda existem muitos dados em bancos relacionais que os usuários desejam ter liberdade de explorar (democratização da informação). A recente primavera das técnicas de Inteligência Artificial aplicadas ao Processamento de Linguagem Natural renova as esperanças dos usuários de terem interfaces de acesso a dados cada vez mais amigáveis, sendo a interface mais amigável a linguagem natural do próprio usuário. Este trabalho apresenta um levantamento dos diferentes modelos de sistemas de Question Answering capazes de responder perguntas escritas em linguagem natural sobre dados armazenados em bancos de dados relacionais.
+Apesar do advento de tecnologias não convencionais de bancos de dados (por exemplo, NoSQL), um grande volume de dados permanece armazenado em repositórios relacionais. Além disso, a necessidade de consumir dados de uma forma mais simples e amigável é exigida por usuários que desejam explorar suas informações com maior liberdade. A recente primavera das técnicas de Inteligência Artificial, com destaque para aquelas relacionadas à Processamento de Linguagem Natural, renovou as esperanças de obtenção de novos avanços nas interfaces de acesso a bancos de dados. Este trabalho apresenta um levantamento dos diferentes modelos de sistemas "Natural Language Interface to Database" (NLIDB), que são sistemas de consulta a bancos de dados relacionais à partir de pesquisas escritas em linguagem natural.
 
 \end{abstract}
-%Bom texto para o ABSTRACT
-%
-%======================================================================================
+
 \section{Introdução}
 
-Linguagem. Essa é uma das principais formas pela qual humanos expressam suas ideias, se comunicam e se inspiram. (video udacity + sapiens)\\
+Linguagem. Essa é uma das principais formas pela qual humanos expressam suas ideias, se comunicam e se inspiram \citep{harari2014sapiens}.\\
 
-Desde o surgimento dos computadores há o desejo de transferir a capacidade de comunicação às máquinas. Isso fica evidente através de computadores famosos do cinema, por exemplo, HAL-9000 \citep{hal9000} ou Deep Thought \citep{deepThought}.\\
+Desde o surgimento dos computadores há o desejo de transferir a capacidade de comunicação às máquinas. Isso fica evidente através de computadores famosos do cinema, por exemplo, HAL-9000 \citep{hal9000}.\\
 
-Um exemplo de tarefa que sempre se desejou transferir às máquinas é a capacidade de responder perguntas. Dentro da ciência da computação, a linha de estudo que investiga sistemas capazes de responder perguntas escritas em linguagem natural é chamada Question Answering (QA) \citep{questionAnswering}.\\
+Um exemplo de tarefa que sempre se desejou transferir às máquinas é a capacidade de responder perguntas. Dentro da ciência da computação, a linha de estudo que investiga sistemas capazes de responder perguntas escritas em linguagem natural é chamada Question Answering (QA) \citep{hirschman2001natural}.\\
 
-Sistemas de QA podem ser classificados de acordo com suas características. São exemplos de características de sistemas QA: domínio, tipo das perguntas suportadas e tipo de fonte de dados \citep{mishra2016survey, speech}. [Checar essas referências também \citep{lopez2011question} e \citep{hirschman2001natural} para a definição de um sistema QA]\\
+Sistemas QA podem ser classificados de acordo com suas características. São exemplos de características de sistemas QA: domínio, tipo das perguntas suportadas e tipo de fonte de dados \citep{mishra2016survey, speech}.\\
 
-O domínio das perguntas pode ser aberto (ou geral) e fechado (ou restrito). Domínios abertos são.... Por outro lado, domínios fechados são....\\
+O domínio das perguntas pode ser aberto (ou geral) ou fechado (ou restrito). Sistemas com domínio aberto são sistemas que suportam diferentes domínios de informação, ou seja, não são específicos de um nicho de dados, por exemplo, dados de alunos de uma universidade. Por outro lado, sistemas com domínio fechado atendem um único escopo de informação.\\
 
-Os tipos de perguntas podem ser factóide, lista, hipotética, causal e confirmação. O tipo factóide .... O tipo lista .... O tipo hipotética .... O tipo causal .... Por fim, o tipo confirmação .... Para o restante desse trabalho, os tipos de pergunta factóide e lista serão tratados como um único tipo e serão chamados de factóide.\\
+Os tipos de perguntas podem ser factóide, lista, hipotética, causal e confirmação. O tipo factóide representa perguntas sobre fatos, por exemplo, "Quem é o presidente do Brasil?". O tipo lista pode ser visto como uma especialização do tipo factóide que suporta como resposta mais de um fato, por exemplo, "Quais foram os últimos 3 presidentes do Brasil?". O tipo hipotética considera uma pergunta baseada em um contexto hipotético, por exemplo, "O que aconteceria se ...". Nesse caso, não existem respostas precisas. O tipo causal não é uma pergunta relacionada a uma entidade específica mas são perguntas sobre explicações e elaborações, demandando uma maior capacidade de processamento de linguagem natural. Por fim, o tipo confirmação só admite perguntas que podem ser respondidas com sim ou não \citep{mishra2016survey}. Para o restante desse trabalho, os tipos de pergunta factóide e lista serão tratados como um único tipo e serão chamados de factóide.\\
 
-As fontes de dados podem ser estruturadas, não estruturadas ou estruturadas e não estruturadas.\\
+As tipos de fontes de dados podem ser estruturadas, não estruturadas ou estruturadas e não estruturadas. Um exemplo de fonte de dados estruturada é um banco relacional. Um exemplo de uma fonte não estruturada são arquivos textos. Sistemas que utilizam como fontes estruturadas e também não estruturadas formam um terceiro tipo.\\
 
-A figura \ref{fig:SistemaQA} apresenta as características de um sistema QA discutidas anteriormente.\\
+A figura \ref{fig:SistemaQA} apresenta uma visão gráfica das características de um Sistema QA apresentadas anteriormente.\\
 
 %exemplo de figura
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.2]{SistemaQA2.jpg}
+\includegraphics[scale=0.3]{SistemaQA2.jpg}
 \caption{Características de um Sistema QA [REDESENHAR. FIGURA FEIA.]}
 \label{fig:SistemaQA}
 \end{figure}
 
-Os tipos de fonte de dados têm forte influência sobre a arquitetura que será utilizada na solução do sistema QA. O objetivo dessa seção é apresentar as principais características das arquiteturas de sistemas QA que acessam fontes de não estruturadas (IR), estruturadas (KB ou NLIDB) e estruturadas + não estruturadas (HÍBRIDOS).\\
+Os tipos de fonte de dados têm forte influência sobre a arquitetura que será utilizada por uma solução para problemas de QA. De acordo com \citep{speech}, as soluções podem ser agrupadas em três tipos: "Information Retrieval" (IR), "Knowledge Based" (KB) ou NLIDB, e Híbridas (HIB), respectivamente para sistemas com fontes de dados não estruturadas, estruturadas e estruturadas + não estruturadas.\\
 
-Sistemas IR são...\\
+Apresentar os principais componentes da arquitetura de Sistemas IR \citep{kolomiyets2011survey}.\\
 
-Sistemas KB ou NLIDB são...\\
+Apresentar os principais componentes da arquitetura de Sistemas KB ou NLIDB\\
 
-Sistemas Híbridos são...\\
+Apresentar os principais componentes da arquitetura de Sistemas Híbridos.\\
 
-O objetivo desse trabalho é fazer um levantamento dos sistemas de QA que acessam bases de dados estruturadas para responder as perguntas do tipo factóide informadas pelos usuários em linguagem natural, independente do tipo de domínio (aberto ou fechado). A seção \ref{nomeDaSecao} falará sobre isso. A seção \ref{nomeDaOutraSecao} falará sobre aquilo.
+O objetivo desse trabalho é fazer um levantamento dos sistemas de QA que acessam bases de dados estruturadas (Sistemas KB ou NLIDB) para responder as perguntas do tipo factóide informadas pelos usuários em linguagem natural, independente do tipo de domínio (aberto ou fechado). A seção \ref{sistemasKB} falará sobre os diferentes tipos de sistemas QA KB. A seção \ref{exemplosSistemasKB} falará sobre exemplos de sistemas QA KB. Por fim, a seção \ref{conclusoes} apresenta as conclusões.
 
 
 %É possível descrever sistemas QA que respondem factóides a partir de suas características, por exemplo, domínio da pergunta e tipo de fonte de dados.\\
@@ -85,7 +92,7 @@ O objetivo desse trabalho é fazer um levantamento dos sistemas de QA que acessa
 %===========================================================
 %===========================================================
 
-\section{Knowledge Based QA Systems\label{sistemasKB} ou Sistemas NLIDB}
+\section{Knowledge Based QA Systems ou Sistemas NLIDB\label{sistemasKB}}
 
 O trabalho \citep{androutsopoulos1995natural} é uma introdução para o problema \textit{Natural Language Interface to DataBases} (NLIDB). Ele apresenta algumas vantagens e desvantagens dos modelos NLIDB quando comparados com linguagens formais de consultas a bancos de dados, por exemplo, SQL, interfaces baseadas em formulários e interfaces gráficas. Ele também discute questões arquiteturais e de portabilidade. \\
 
@@ -98,7 +105,7 @@ A figura \ref{fig:SistemaKBNLIDB} apresenta tipos de implementações/soluções
 %exemplo de figura
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.2]{SistemaKBNLIDB.jpg}
+\includegraphics[scale=0.3]{SistemaKBNLIDB.jpg}
 \caption{Tipos de implementações/soluções de sistemas KB ou NLIDB [REDESENHAR. FIGURA FEIA.]}
 \label{fig:SistemaKBNLIDB}
 \end{figure}
@@ -126,7 +133,7 @@ Explicar o que são sistemas semi-supervisionados.
 %===========================================================
 %===========================================================
 
-\section{Exemplos de Sistema KB QA}
+\section{Exemplos de Sistema KB QA\label{exemplosSistemasKB}}
 
 A seção \ref{sistemasKB} apresentou os tipos de sistemas QA KB, que são IR, KB e Híbridos. O objetivo dessa seção é apresentar exemplos de sistemas KB.\\
 
@@ -198,9 +205,6 @@ O trabalho \citep{2018arXiv180703100W} detecta e exclui programas falhos durante
 
 O trabalho \citep{shi2018incsql} atualmente é o primeiro do ranking WikiSQL (18/09/2018). Ele ainda é um relatório técnico em elaboração. Ele citou o trabalho \citep{finegan2018improving} (ACL 2018) que propõe uma metodologia de avaliação para problemas chamados de \textit{Text-to-SQL}.\\
 
-
-
-
 \subsection{Tabela Resumo}
 
 Tabela abaixo consolida as características dos sistemas apresentados nessa seção.
@@ -210,7 +214,7 @@ Tabela abaixo consolida as características dos sistemas apresentados nessa seç
 %===========================================================
 %===========================================================
 
-\section{Conclusões e Trabalhos Futuros}
+\section{Conclusões\label{conclusoes}}
 
 Criar modelo para considerar mais de uma tabela?\\
 
@@ -239,57 +243,54 @@ Geração de linguagem intermediária? 2 - Universal Language Model, que foi pub
 %======================================================================================
 %======================================================================================
 %======================================================================================
-\section{Old}
+%\section{Old}
 
-[DÚVIDA: VOU FAZER ESSA SEÇÃO EM LINHA DO TEMPO OU AGRUPANDO PELOS TIPOS?]\\
+%[DÚVIDA: VOU FAZER ESSA SEÇÃO EM LINHA DO TEMPO OU AGRUPANDO PELOS TIPOS?]\\
 
-Falar sobre os exemplos dos anos 70 e 80 e em quais tipos eles se encaixam: regras, superv ou semi-superv. Também é importante destacar os datasets utilizados...\\
+%Falar sobre os exemplos dos anos 70 e 80 e em quais tipos eles se encaixam: regras, superv ou semi-superv. Também é importante destacar os datasets utilizados...\\
 
-Mais recentemente, estratégias supervisionadas baseadas em INDUÇÃO DE PROGRAMAS\\
+%Mais recentemente, estratégias supervisionadas baseadas em INDUÇÃO DE PROGRAMAS\\
 
-Outros trabalhos vem sendo feitos através de redes neurais.\\
+%Outros trabalhos vem sendo feitos através de redes neurais.\\
 
-O trabalho \citep{zhong2017seq2sql} propôs a criação do \textit{dataset} WikiSQL, conjunto de pares de perguntas em linguagens natural e queries SQL. Diversos trabalhos propuseram soluções testadas sobre esse \textit{dataset}.\\
+%O trabalho \citep{zhong2017seq2sql} propôs a criação do \textit{dataset} WikiSQL, conjunto de pares de perguntas em linguagens natural e queries SQL. Diversos trabalhos propuseram soluções testadas sobre esse \textit{dataset}.\\
 
-Falar sobre todos os trabalhos do WikiSQL. Para cada uma das soluções é importante falar do tipo: regras, superv ou semi-super\\
+%Falar sobre todos os trabalhos do WikiSQL. Para cada uma das soluções é importante falar do tipo: regras, superv ou semi-super\\
 
 %======================================================================================
 %======================================================================================
 %======================================================================================
 
-\section{Qual o objetivo da tese?}
+%\section{Qual o objetivo da tese?}
 
-Qual o objetivo do trabalho?\\
+%Qual o objetivo do trabalho?\\
 
-Esse trabalho propõe o CCRNet, que é um modelo de conversão de consultas a bancos de dados relacionais escritas em linguagem natural para queries SQL, independente do modelo de dados utilizado, ou seja, capaz de ser utilizado para a realização de consultas em modelos de dados de diferentes áreas de conhecimento (database agnostic). Além disso, para o idioma português é proposto um plugin (CCRNetBR) que tem como objetivo otimizar os resultados para o idioma específico.\\
+%Esse trabalho propõe o CCRNet, que é um modelo de conversão de consultas a bancos de dados relacionais escritas em linguagem natural para queries SQL, independente do modelo de dados utilizado, ou seja, capaz de ser utilizado para a realização de consultas em modelos de dados de diferentes áreas de conhecimento (database agnostic). Além disso, para o idioma português é proposto um plugin (CCRNetBR) que tem como objetivo otimizar os resultados para o idioma específico.\\
 
-Tirar a palavra "modelo" de dados do objetivo. Trocar por schema (schema agnostic).\\
+%Tirar a palavra "modelo" de dados do objetivo. Trocar por schema (schema agnostic).\\
 
-Esse modelo será avaliado pelos resultados obtidos nas suas execuções frente a diferentes datasets (https://atlas.cern/tags/open-data, WikiSQL - MAS, IMDB e YELP).\\
+%Esse modelo será avaliado pelos resultados obtidos nas suas execuções frente a diferentes datasets (https://atlas.cern/tags/open-data, WikiSQL - MAS, IMDB e YELP).\\
 
-Como os outros modelos funcionam? O que proporei de diferente para o meu modelo?\\
+%Como os outros modelos funcionam? O que proporei de diferente para o meu modelo?\\
 
-Para responder essa pergunta preciso verificar os tipos de solução. Acredito que os surveys apresentam arquiteturas com os tipos de soluções. Preciso descobrir em qual tipo de solução os modelos NL2SQL se encaixam. Dessa forma, consigo encaixar os artigos antigos com os artigos atuais que tratam o WikiSQL.\\
+%Para responder essa pergunta preciso verificar os tipos de solução. Acredito que os surveys apresentam arquiteturas com os tipos de soluções. Preciso descobrir em qual tipo de solução os modelos NL2SQL se encaixam. Dessa forma, consigo encaixar os artigos antigos com os artigos atuais que tratam o WikiSQL.\\
 
-Também é importante encaixar o modelo síntese automática de queries SQL.\\
+%Também é importante encaixar o modelo síntese automática de queries SQL.\\
 
-AGORA já! Pensar em ideias antes de aprofundar o conhecimento.\\
+%AGORA já! Pensar em ideias antes de aprofundar o conhecimento.\\
 
-Aprofundar estudo em uma solução NL2SQL e ver como funciona a rede LSTM nesse caso. Preciso conseguir explicar com detalhes como funciona um exemplo do wikisql. Como a saída SQL é avaliada no wikiSQL para ganhar uma nota?\\
+%Aprofundar estudo em uma solução NL2SQL e ver como funciona a rede LSTM nesse caso. Preciso conseguir explicar com detalhes como funciona um exemplo do wikisql. Como a saída SQL é avaliada no wikiSQL para ganhar uma nota?\\
 
-\section{Sobre os Datasets}
+%\section{Sobre os Datasets}
 
-\section{Pesquisa Bibliográfica}
+%\section{Pesquisa Bibliográfica}
 
 
-ACHO QUE VOU REMOVER
-O trabalho \citep{kolomiyets2011survey} também é uma introdução. Ele explica as diferenças entre "\textit{Question Answering}" e "\textit{Information Retrieveal}" e NLIDBs. Segundo ele, NLIDB é a origem de QA, mas QA expandiu a ideia de pesquisa para outras fontes de dados diferentes de bancos relacionais. \\
+%ACHO QUE VOU REMOVER O trabalho \citep{kolomiyets2011survey} também é uma introdução. Ele explica as diferenças entre "\textit{Question Answering}" e "\textit{Information Retrieveal}" e NLIDBs. Segundo ele, NLIDB é a origem de QA, mas QA expandiu a ideia de pesquisa para outras fontes de dados diferentes de bancos relacionais. \\
 
-ACHO QUE VOU REMOVER
-O trabalho \citep{pazos2013natural} apresenta um estudo sobre sistemas NLIDB. Ele discute questões como classificação, técnicas, vantagens, desvantagens, e uma proposta para uma avaliação apropriada deles. \\
+%ACHO QUE VOU REMOVER O trabalho \citep{pazos2013natural} apresenta um estudo sobre sistemas NLIDB. Ele discute questões como classificação, técnicas, vantagens, desvantagens, e uma proposta para uma avaliação apropriada deles. \\
 
-ACHO QUE VOU REMOVER
-O trabalho \citep{mishra2016survey} faz um resumo sobre trabalhos QA e os classifica com base em diferentes critérios, como: domínio da aplicação, tipos de pergunta (what, when, which, who e how), tipo da análise da pergunta (semântica, sintática, morfológica), fontes de dados (estruturados, semi-estruturados e não estruturados). \\
+%ACHO QUE VOU REMOVER O trabalho \citep{mishra2016survey} faz um resumo sobre trabalhos QA e os classifica com base em diferentes critérios, como: domínio da aplicação, tipos de pergunta (what, when, which, who e how), tipo da análise da pergunta (semântica, sintática, morfológica), fontes de dados (estruturados, semi-estruturados e não estruturados). \\
 
 
 
