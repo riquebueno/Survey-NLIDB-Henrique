@@ -1,0 +1,309 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\title{Como fazer consultas em bancos de dados relacionais sem conhecer SQL?}
+\author{Henrique Bueno Rodrigues}
+\date{November 2018}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+Apesar do advento de tecnologias não convencionais de bancos de dados, por exemplo, Hadoop e NoSQL, ainda existem muitos dados em bancos relacionais que os usuários desejam ter liberdade de explorar (democratização da informação). A recente primavera das técnicas de Inteligência Artificial aplicadas ao Processamento de Linguagem Natural renova as esperanças dos usuários de terem interfaces de acesso a dados cada vez mais amigáveis, sendo a interface mais amigável a linguagem natural do próprio usuário. Este trabalho apresenta um levantamento dos diferentes modelos de sistemas de Question Answering capazes de responder perguntas escritas em linguagem natural sobre dados armazenados em bancos de dados relacionais.
+
+\end{abstract}
+%Bom texto para o ABSTRACT
+%
+%======================================================================================
+\section{Introdução}
+
+Linguagem. Essa é uma das principais formas pela qual humanos expressam suas ideias, se comunicam e se inspiram. (video udacity + sapiens)\\
+
+Desde o surgimento dos computadores há o desejo de transferir a capacidade de comunicação às máquinas. Isso fica evidente através de computadores famosos do cinema, por exemplo, HAL-9000 \citep{hal9000} ou Deep Thought \citep{deepThought}.\\
+
+Um exemplo de tarefa que sempre se desejou transferir às máquinas é a capacidade de responder perguntas. Dentro da ciência da computação, a linha de estudo que investiga sistemas capazes de responder perguntas escritas em linguagem natural é chamada Question Answering (QA) \citep{questionAnswering}.\\
+
+Sistemas de QA podem ser classificados de acordo com suas características. São exemplos de características de sistemas QA: domínio, tipo das perguntas suportadas e tipo de fonte de dados \citep{mishra2016survey, speech}. [Checar essas referências também \citep{lopez2011question} e \citep{hirschman2001natural} para a definição de um sistema QA]\\
+
+O domínio das perguntas pode ser aberto (ou geral) e fechado (ou restrito). Domínios abertos são.... Por outro lado, domínios fechados são....\\
+
+Os tipos de perguntas podem ser factóide, lista, hipotética, causal e confirmação. O tipo factóide .... O tipo lista .... O tipo hipotética .... O tipo causal .... Por fim, o tipo confirmação .... Para o restante desse trabalho, os tipos de pergunta factóide e lista serão tratados como um único tipo e serão chamados de factóide.\\
+
+As fontes de dados podem ser estruturadas, não estruturadas ou estruturadas e não estruturadas.\\
+
+A figura \ref{fig:SistemaQA} apresenta as características de um sistema QA discutidas anteriormente.\\
+
+%exemplo de figura
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{SistemaQA2.jpg}
+\caption{Características de um Sistema QA [REDESENHAR. FIGURA FEIA.]}
+\label{fig:SistemaQA}
+\end{figure}
+
+Os tipos de fonte de dados têm forte influência sobre a arquitetura que será utilizada na solução do sistema QA. O objetivo dessa seção é apresentar as principais características das arquiteturas de sistemas QA que acessam fontes de não estruturadas (IR), estruturadas (KB ou NLIDB) e estruturadas + não estruturadas (HÍBRIDOS).\\
+
+Sistemas IR são...\\
+
+Sistemas KB ou NLIDB são...\\
+
+Sistemas Híbridos são...\\
+
+O objetivo desse trabalho é fazer um levantamento dos sistemas de QA que acessam bases de dados estruturadas para responder as perguntas do tipo factóide informadas pelos usuários em linguagem natural, independente do tipo de domínio (aberto ou fechado). A seção \ref{nomeDaSecao} falará sobre isso. A seção \ref{nomeDaOutraSecao} falará sobre aquilo.
+
+
+%É possível descrever sistemas QA que respondem factóides a partir de suas características, por exemplo, domínio da pergunta e tipo de fonte de dados.\\
+
+%São exemplos de características de sistemas QA: domínio e tipo das perguntas suportadas \citep{mishra2016survey}. [Checar essas referências também \citep{lopez2011question} e \citep{hirschman2001natural} para a definição de um sistema QA]\\
+
+
+
+%Os tipos de perguntas podem ser factóide, lista, hipotética, causal e confirmação. O tipo factóide .... O tipo lista .... O tipo hipotética .... O tipo causal .... Por fim, o tipo confirmação .... Para o restante desse trabalho, os tipos de pergunta factóide e lista serão tratados como um único tipo e serão chamados de factóide.\\
+
+%Independente da característica "domínio da pergunta", sistemas QA que suportam "tipo de pergunta" factóide são tipicamente resolvidos por modelos IR, KB ou Híbridos. Modelos IR são utilizados quando a fonte de dados acessada pelo sistema QA são não-estruturadas. Caso a fonte de dados do sistema QA seja estruturada, modelos KB são utilizados. Por fim, caso a fonte de dados seja composta por dados não-estruturados e estruturados, modelos híbridos são adotados \citep{livroStanford}.\\
+
+
+
+%Modelos IR são utilizados quando a fonte de dados acessada pelo sistema QA são não-estruturadas. Caso a fonte de dados do sistema QA seja estruturada, modelos KB são utilizados. Por fim, caso a fonte de dados seja composta por dados não-estruturados e estruturados, modelos híbridos são adotados \citep{livroStanford}.\\
+
+%Para os sistemas que suportam perguntas do tipo factóide, caso os dados sejam não estruturados, sistemas de QA são chamados de Information Retrieval. Caso os dados sejam estruturados, sistemas de QA são chamados de Knowledge Based .  Sistemas que trabalham com as duas abordagens são conhecidos como Híbridos\\
+
+%Sistemas Information Retrieval (IR) são...\\
+
+%Sistemas Knowledge Based (KB) são .... Sistemas KB também são conhecidos como Natural Language Interfaces to Databases \citep{androutsopoulos1995natural}. \\
+
+%Sistemas Híbridos...\\
+
+
+
+%===========================================================
+%===========================================================
+%===========================================================
+%===========================================================
+
+\section{Knowledge Based QA Systems\label{sistemasKB} ou Sistemas NLIDB}
+
+O trabalho \citep{androutsopoulos1995natural} é uma introdução para o problema \textit{Natural Language Interface to DataBases} (NLIDB). Ele apresenta algumas vantagens e desvantagens dos modelos NLIDB quando comparados com linguagens formais de consultas a bancos de dados, por exemplo, SQL, interfaces baseadas em formulários e interfaces gráficas. Ele também discute questões arquiteturais e de portabilidade. \\
+
+Sistemas KB QA são sistemas que recebem consultas em linguagem natural e retornam resultados a partir de fontes de dados estruturadas. Implementações desse tipo de sistemas podem ser classificadas como: baseado em regras, supervisionados e semi-supervisionados\citep{speech}.\\
+
+[Existe algo para mais de uma tabela? Pode ser um diferencial! Talvez possa falar aqui que uma limitação é que todas as abordagens utilizam uma única tabela.]\\
+
+A figura \ref{fig:SistemaKBNLIDB} apresenta tipos de implementações/soluções de sistemas QA KB ou NLIDB discutidas anteriormente.
+
+%exemplo de figura
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{SistemaKBNLIDB.jpg}
+\caption{Tipos de implementações/soluções de sistemas KB ou NLIDB [REDESENHAR. FIGURA FEIA.]}
+\label{fig:SistemaKBNLIDB}
+\end{figure}
+
+\subsection{Sistemas KB QA baseados em regras}
+
+Explicar o que são sistemas baseados em regras.
+
+\subsection{Sistemas KB QA supervisionados}
+
+Explicar o que são sistemas supervisionados.\\
+
+Falar das soluções baseadas em síntese de programas [ACREDITO QUE NÃO PRECISA CRIAR UMA SUBSEÇÃO PARA ISSO].\\
+
+Falar das soluções baseadas em redes neurais (também chamados de NL2SQL e Text-to-SQL) [ACREDITO QUE NÃO PRECISA CRIAR UMA SUBSEÇÃO PARA ISSO].\\
+
+[Olhar blog de síntese de programas da Aline. quais as relações com as redes neurais? Existe SP co ML e sem ML.]. 1 - program synthesis: https://alexpolozov.com/blog/program-synthesis-2018/ ele fala do survey que eu mencionei, e ele menciona o dataset WikiSQL, na parte de datasets.
+
+\subsection{Sistemas KB QA semi-supervisionados}
+
+Explicar o que são sistemas semi-supervisionados.
+
+%===========================================================
+%===========================================================
+%===========================================================
+%===========================================================
+
+\section{Exemplos de Sistema KB QA}
+
+A seção \ref{sistemasKB} apresentou os tipos de sistemas QA KB, que são IR, KB e Híbridos. O objetivo dessa seção é apresentar exemplos de sistemas KB.\\
+
+\subsection{Trabalhos antigos [NOME ESTÁ RUIM, MAS PRECISO CRIAR SUBSEÇÃO PQ TEXTO ESTÁ GRANDE]}
+
+Protótipos de sistemas NLIDB apareceram no final dos anos 60. Nessa época, o NLIDB mais conhecido era LUNAR \citep{woods1973progress}, uma interface em linguagem natural para um banco de dados de análises químicas de rochas lunares. Esse sistema é concentrado em um domínio de informação. Era baseado em regras, sup ou semi-sup?\\
+
+RENDEZVOUS \citep{codd1974seven} engajava os usuários em diálogos para ajudá-los a formular suas consultas. Domínio aberto ou fechado? Era baseado em regras, sup ou semi-sup?\\
+
+LADDER \citep{hendrix1978developing} usava gramáticas semânticas, uma técnica que intercala processamento sintático e semântico. Essa estratégia gerava dificuldades para o uso do sistema em outros domínios uma vez que demandava a criação de uma outra gramática. Era baseado em regras, sup ou semi-sup?\\
+
+Conforme pesquisadores passaram a concentrar esforços em sistemas de domínio aberto, sistemas baseados em "semantic grammars" passaram a ser abandonados. PLANES \citep{waltz1978english} e PHILIQA1 \citep{scha1977philips} foram outros sistemas que apareceram no final dos anos 70. Eram de domínio aberto ou fechado? Eram baseados em regras, sup ou semi-sup?\\
+
+CHAT80 \citep{warren1982efficient} é um dos sistemas mais conhecidos do início dos anos 80. Foi implementado em PROLOG e transformava consultas escritas em inglês para expressões PROLOG, que eram avaliadas em bancos de dados PROLOG. Eram de domínio aberto ou fechado? Eram baseados em regras, sup ou semi-sup?\\
+
+No meio dos anos 80, NLIDBs eram uma área muito popular de pesquisa. Grande parte dos pesquisadores se interessavam por questões do portabilidade, ou seja, sistemas aplicáveis a diferentes domínios. Por exemplo, o sistema TEAM \citep{grosz1983team} foi projetado para ser facilmente configurável sem conhecimento do banco de dados utilizado. Era baseado em regras, sup ou semi-sup?\\
+
+ASK \citep{thompson1983introducing} permitia que usuários finais ensinassem ao sistema novas palavras e conceitos em qualquer momento da interação. Ele tinha um sistema gerenciador de banco de dados interno e tinha a habilidade de interagir com outras bases externas, programas de email eletrônico e outras aplicações. Era de domínio aberto ou fechado? Era baseado em regras, sup ou semi-sup?\\
+
+JANUS \citep{hinrichs1988tense} tinha a mesma habilidade de conectar a outras sistemas (bancos de dados, sistemas especialistas, dispositivos gráficos, etc). Dessa forma, ele abstraia a complexidade dos sistemas provedores de informação para o usuário final. Além disso, ele era um dos poucos a suportar questões temporais. Era de domínio aberto ou fechado? Era baseado em regras, sup ou semi-sup?\\
+
+Diversos outros sistemas apareceram nos anos 80, por exemplo DATALOG \citep{hafner1984interaction}, EUFID \citep{templeton1983problems}, LDC \citep{ballard1984ldc}, TQA \citep{damerau1981operating} e TELI \citep{ballard1986semantic}. Eram de domínio aberto ou fechado? Eram baseados em regras, sup ou semi-sup?\\
+
+De acordo com \citep{johnson1984natural} em 1987, tecnologias NLIDB seriam o padrão para usuários de DBMSs e haveria um conjunto de alternativas de produtos. Entretanto, essa previsão não se confirmou por alguns motivos: evolução das interfaces gráficas, ...\\
+
+Outros trabalhos mais recentes...\\
+
+A dissertação de mestrado \citep{chandra2006natural} propõe um modelo baseado em grafos. O sistema faz a coleta de todas as informações possíveis de bancos de dados e sentenças existentes, e transforma essas informações em uma base de conhecimento para o sistema. Dado uma nova pergunta, o sistema irá usar o conhecimento para analisar e traduzir a sentença em uma \textit{query} correspondente. \\
+
+O trabalho \cite{popescu2003towards} introduz a definição de "perguntas semanticamente tratáveis" e a implementação de um modelo chamado "PRECISE NLI". O modelo PRECISE funcionou muito bem com bases de testes de perguntas "semanticamente tratáveis". O problema é que esse tipo de pergunta exige que as perguntas sejam escritas respeitando um conjunto de regras, por exemplo, que um atributo venha sempre precedido de palavras como \textit{"What"} e \textit{"Who"}. Essa é uma grande limitação do modelo. \\
+
+O trabalho \citep{minock2005phrasal} apresenta o modelo STED que tem a habilidade de entender e gerar frases em linguagem natural para engajar o usuário na clarificação dos diálogos quando há dúvidas na pergunta de entrada. \\
+
+Conforme o trabalho \citep{akula2013novel}, usuários falham em expressas suas intenções em apenas uma pergunta em linguagem natural. Assim, para responder uma sequência de perguntas em linguagem natural, sistemas NLIDB precisam capturar e manter o contexto do usuário. \\
+
+O trabalho \citep{li2014constructing} propõe o modelo NaLIR \\
+
+A Microsoft já teve seu produto NLIDB, chamado "Microsoft English Query", mas ele foi descontinuado em 2008 (https://www.infoq.com/news/English-Query-Discontinued).\\
+
+\subsection{Trabalhos NOVOS [NOME ESTÁ RUIM, MAS PRECISO CRIAR SUBSEÇÃO PQ TEXTO ESTÁ GRANDE]}
+
+Mais recentemente novos modelos supervisionados baseados em Síntese de Programas e em Redes Neurais vem sendo propostos. Esses modelos serão detalhados a seguir.\\
+
+Uma abordagem muito usada são Modelos KB SUP baseados em síntese de programas.\\
+
+O trabalho \citep{yaghmazadeh2017sqlizer} propõe o SQLizer que é um modelo baseado em síntese de programas. \\
+
+O trabalho \citep{zelle1996learning} apresenta o CHILL que usa técnicas de Programação Lógica Indutiva para gerar consultas na forma lógica.
+
+Recentemente houve um crescimento de modelos KB SUP baseados em redes neurais.\\
+
+O trabalho \citep{zhong2017seq2sql} apresentou um \textit{dataset} de 80654 perguntas anotadas manualmente para apoiar processos de treinamento de modelos NLIDB chamado WikiSQL. Além disso, ele também propôs o modelo Seq2SQL, uma rede neural profunda para tradução de perguntas em linguagem natural para consultas SQL. \\
+
+Após a criação do WikiSQL, diversos trabalhos foram publicados. Seguem esses trabalhos em ordem de publicação. Essa ordem também respeita a posição no ranking (https://github.com/salesforce/WikiSQL) da última para a primeira posição.\\
+
+O trabalho \citep{wang2018pointing} usa um modelo \textit{sequence to sequence} onde o \textit{decoder} usa um modelo simples de digitação de expressões SQL para estruturar a predição da saída. \\
+
+O trabalho \citep{xu2017sqlnet} utiliza uma estratégia baseada em \textit{sketchs} que armazena um grafo de dependências de tal forma que uma predição pode ser feita considerando apenas as predições anteriores que ele depende. \\
+
+O trabalho \citep{huang2018natural} explora um protocolo diferente de aprendizado ... \\
+
+O trabalho \citep{yu2018typesql} apresenta a estratégia TypeSQL, que vê problemas NLIDB como uma tarefa "\textit{slot filling}". Eles também mostram que acessando o conteúdo de bancos de dados pode melhorar significativamente os resultados quando as perguntas dos usuários não são bem formadas. \\
+
+O trabalho \citep{dong2018coarse} decompõe o processo de \textit{parsing} semântico em 2 etapas. Primeiro ele gera um \textit{sketch} da consulta SQL e depois preenche as lacunas da \textit{sketch}. \\
+
+O trabalho \cite{mccann2018natural} introduz o desafio "\textit{Natural Language Decathlon}" (decaNLP), que possui 10 tipos de tarefas: question answering, machine translation, summarization, natural language inference, sentiment analysis, semantic role labeling, zero-shot relation extraction, goal-oriented dialogue, semantic parsing, and commonsense pronoun resolution. Além disso, eles apresentam uma rede multitarefa chamada "\textit{Multitask Question Answering Network}" (MQAN) que é capaz de aprender todas as tarefas do decaNLP sem módulos, parâmetros ou configurações específicos. \\
+
+O trabalho \citep{2018arXiv180703100W} detecta e exclui programas falhos durante o processo de decodificação através da execução do programa parcialmente gerado. \\
+
+O trabalho \citep{shi2018incsql} atualmente é o primeiro do ranking WikiSQL (18/09/2018). Ele ainda é um relatório técnico em elaboração. Ele citou o trabalho \citep{finegan2018improving} (ACL 2018) que propõe uma metodologia de avaliação para problemas chamados de \textit{Text-to-SQL}.\\
+
+
+
+
+\subsection{Tabela Resumo}
+
+Tabela abaixo consolida as características dos sistemas apresentados nessa seção.
+
+%===========================================================
+%===========================================================
+%===========================================================
+%===========================================================
+
+\section{Conclusões e Trabalhos Futuros}
+
+Criar modelo para considerar mais de uma tabela?\\
+
+Geração de linguagem intermediária? 2 - Universal Language Model, que foi publicado no ACL 2018: http://nlp.fast.ai/classification/2018/05/15/introducting-ulmfit.html.\\
+
+3 - Vários problemas de NLP resolvidos com a mesma topologia de rede (baseada em atenção) do OpenAI: https://blog.openai.com/language-unsupervised/\\
+
+%===========================================================
+%===========================================================
+%===========================================================
+%===========================================================
+
+
+
+
+
+
+%exemplo de figura
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[scale=1.7]{universe}
+%\caption{The Universe}
+%\label{fig:universe}
+%\end{figure}
+
+%======================================================================================
+%======================================================================================
+%======================================================================================
+\section{Old}
+
+[DÚVIDA: VOU FAZER ESSA SEÇÃO EM LINHA DO TEMPO OU AGRUPANDO PELOS TIPOS?]\\
+
+Falar sobre os exemplos dos anos 70 e 80 e em quais tipos eles se encaixam: regras, superv ou semi-superv. Também é importante destacar os datasets utilizados...\\
+
+Mais recentemente, estratégias supervisionadas baseadas em INDUÇÃO DE PROGRAMAS\\
+
+Outros trabalhos vem sendo feitos através de redes neurais.\\
+
+O trabalho \citep{zhong2017seq2sql} propôs a criação do \textit{dataset} WikiSQL, conjunto de pares de perguntas em linguagens natural e queries SQL. Diversos trabalhos propuseram soluções testadas sobre esse \textit{dataset}.\\
+
+Falar sobre todos os trabalhos do WikiSQL. Para cada uma das soluções é importante falar do tipo: regras, superv ou semi-super\\
+
+%======================================================================================
+%======================================================================================
+%======================================================================================
+
+\section{Qual o objetivo da tese?}
+
+Qual o objetivo do trabalho?\\
+
+Esse trabalho propõe o CCRNet, que é um modelo de conversão de consultas a bancos de dados relacionais escritas em linguagem natural para queries SQL, independente do modelo de dados utilizado, ou seja, capaz de ser utilizado para a realização de consultas em modelos de dados de diferentes áreas de conhecimento (database agnostic). Além disso, para o idioma português é proposto um plugin (CCRNetBR) que tem como objetivo otimizar os resultados para o idioma específico.\\
+
+Tirar a palavra "modelo" de dados do objetivo. Trocar por schema (schema agnostic).\\
+
+Esse modelo será avaliado pelos resultados obtidos nas suas execuções frente a diferentes datasets (https://atlas.cern/tags/open-data, WikiSQL - MAS, IMDB e YELP).\\
+
+Como os outros modelos funcionam? O que proporei de diferente para o meu modelo?\\
+
+Para responder essa pergunta preciso verificar os tipos de solução. Acredito que os surveys apresentam arquiteturas com os tipos de soluções. Preciso descobrir em qual tipo de solução os modelos NL2SQL se encaixam. Dessa forma, consigo encaixar os artigos antigos com os artigos atuais que tratam o WikiSQL.\\
+
+Também é importante encaixar o modelo síntese automática de queries SQL.\\
+
+AGORA já! Pensar em ideias antes de aprofundar o conhecimento.\\
+
+Aprofundar estudo em uma solução NL2SQL e ver como funciona a rede LSTM nesse caso. Preciso conseguir explicar com detalhes como funciona um exemplo do wikisql. Como a saída SQL é avaliada no wikiSQL para ganhar uma nota?\\
+
+\section{Sobre os Datasets}
+
+\section{Pesquisa Bibliográfica}
+
+
+ACHO QUE VOU REMOVER
+O trabalho \citep{kolomiyets2011survey} também é uma introdução. Ele explica as diferenças entre "\textit{Question Answering}" e "\textit{Information Retrieveal}" e NLIDBs. Segundo ele, NLIDB é a origem de QA, mas QA expandiu a ideia de pesquisa para outras fontes de dados diferentes de bancos relacionais. \\
+
+ACHO QUE VOU REMOVER
+O trabalho \citep{pazos2013natural} apresenta um estudo sobre sistemas NLIDB. Ele discute questões como classificação, técnicas, vantagens, desvantagens, e uma proposta para uma avaliação apropriada deles. \\
+
+ACHO QUE VOU REMOVER
+O trabalho \citep{mishra2016survey} faz um resumo sobre trabalhos QA e os classifica com base em diferentes critérios, como: domínio da aplicação, tipos de pergunta (what, when, which, who e how), tipo da análise da pergunta (semântica, sintática, morfológica), fontes de dados (estruturados, semi-estruturados e não estruturados). \\
+
+
+
+
+%======================================================================================
+
+
+
+%======================================================================================
+
+
+
+%======================================================================================
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}
