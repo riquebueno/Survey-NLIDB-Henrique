@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[portuguese]{babel}
 
 
 
@@ -13,7 +13,7 @@
 
 \title{Como fazer consultas a bancos de dados relacionais sem conhecer SQL?}
 \author{Henrique Bueno Rodrigues}
-\date{November 2018}
+\date{Novembro 2018}
 
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -22,17 +22,21 @@
 
 \maketitle
 \begin{abstract}
-Apesar do advento de tecnologias de bancos de dados não convencionais, por exemplo, NoSQL, um grande volume de dados permanece armazenado em repositórios relacionais. Além disso, a necessidade de consumir dados de uma forma mais simples e amigável é exigida por usuários que desejam explorar suas informações com maior liberdade. A recente primavera das técnicas de Inteligência Artificial, com destaque para aquelas relacionadas à Processamento de Linguagem Natural, renovou as esperanças de obtenção de novos avanços nas interfaces de acesso a bancos de dados. Este trabalho apresenta um levantamento dos diferentes modelos de sistemas "Natural Language Interface to Database" (NLIDB), que são sistemas de consulta a bancos de dados relacionais à partir de pesquisas escritas em linguagem natural.
+Apesar do advento de tecnologias de bancos de dados não convencionais, por exemplo, NoSQL, um grande volume de dados permanece armazenado em repositórios relacionais. Além disso, a necessidade de consumir dados de uma forma mais simples e amigável é exigida por usuários que desejam explorar suas informações com maior liberdade. A recente primavera das técnicas de Inteligência Artificial, com destaque para aquelas relacionadas à Processamento de Linguagem Natural, renovou as esperanças de obtenção de novos avanços nas interfaces de acesso a bancos de dados. Este trabalho apresenta um levantamento dos diferentes modelos de sistemas "Natural Language Interface to Database" (NLIDB), que são sistemas de consulta a bancos de dados relacionais à partir de pesquisas escritas em linguagem natural.\\
+
+IMPORTANTE PARA A TESE: Quais são as minhas contribuições? Quais são os problemas e lacunas dos outros trabalhos?\\
+
+Olhar foto do quadro do Plastino\\
+
+Compartilhar Overleaf com Aline
 \end{abstract}
 
 \section{Introdução}
 
 Linguagem. Essa é uma das principais formas pela qual humanos expressam suas ideias, se comunicam e se inspiram \citep{harari2014sapiens}.\\
 
-Desde o surgimento dos computadores há o desejo de transferir a capacidade de comunicação às máquinas. 
+Desde o surgimento dos computadores há o desejo de transferir a capacidade de comunicação às máquinas. %VER MOTIVAÇÕES DE OUTROS TRABALHOS\\
 %Isso fica evidente através de computadores famosos do cinema, por exemplo, HAL-9000 \citep{hal9000}.\\
-
-VER MOTIVAÇÕES DE OUTROS TRABALHOS\\
 
 Um exemplo de tarefa que sempre se desejou transferir às máquinas é a capacidade de responder perguntas. Dentro da ciência da computação, a linha de estudo que investiga sistemas capazes de responder perguntas escritas em linguagem natural é chamada Question Answering (QA) \citep{hirschman2001natural}.\\
 
@@ -42,52 +46,36 @@ O domínio das perguntas pode ser aberto (geral) ou fechado (restrito). No caso 
 
 Os tipos de perguntas podem ser factóide, lista, hipotética, causal e confirmação. O tipo factóide representa perguntas sobre fatos, por exemplo, "Quem é o presidente do Brasil?". O tipo lista pode ser visto como uma especialização do tipo factóide que suporta como resposta mais de um fato, por exemplo, "Quais foram os últimos 3 presidentes do Brasil?". O tipo hipotética considera uma pergunta baseada em um contexto hipotético, por exemplo, "O que aconteceria se ...". Nesse caso, não existem respostas precisas. O tipo causal não é uma pergunta relacionada a uma entidade específica mas são perguntas sobre explicações e elaborações, demandando uma maior capacidade de processamento de linguagem natural. Por fim, o tipo confirmação só admite perguntas que podem ser respondidas com sim ou não \citep{mishra2016survey}. Para o restante desse trabalho, os tipos de pergunta factóide e lista serão tratados como um único tipo e serão chamados de factóide.\\
 
-As tipos de fontes de dados podem ser estruturadas, não estruturadas ou estruturadas e não estruturadas. Um exemplo de fonte de dados estruturada é um banco relacional. Um exemplo de uma fonte não estruturada são arquivos textos. Sistemas que utilizam como fontes estruturadas e também não estruturadas formam um terceiro tipo.\\
-
-ESSE CARA É UM SURVEY DE UM JOURNAL  C Question Answering Systems: Survey and Trends DE 2015 MAS TEM 26 REFS. mas se concentra so na web\\
-
-A figura \ref{fig:SistemaQA} apresenta uma visão gráfica das características de problemas do tipo QA apresentadas anteriormente.\\
+As tipos de fontes de dados podem ser estruturadas, não estruturadas ou híbridas. Um exemplo de fonte de dados estruturada é um banco relacional. Um exemplo de uma fonte não estruturada são arquivos textos. Sistemas que utilizam como fontes estruturadas e também não estruturadas formam um terceiro tipo. A figura \ref{fig:SistemaQA} apresenta uma visão gráfica das características de problemas do tipo QA apresentadas anteriormente.\\
 
 %exemplo de figura
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.3]{SistemaQA2.jpg}
-\caption{Características de problemas do tipo QA [REDESENHAR. FIGURA FEIA.]}
+\caption{Características de problemas do tipo QA}
 \label{fig:SistemaQA}
 \end{figure}
 
-Os tipos das fontes de dados acessadas têm forte influência sobre as arquiteturas que serão utilizadas na implementação dos sistemas que se propõem tratar problemas do tipo QA. De acordo com \citep{speech}, existem 3 principais paradigmas para tratar problemas do tipo QA: "Information Retrieval" (IR), "Knowledge Based" (KB) MORREU e PRECISO ENCAIXAR[ou NLIDB], e Híbridas (HIB), respectivamente para tipos de fontes de dados não estruturadas, estruturadas e estruturadas + não estruturadas.\\
-
-O paradigma Information Retrieval (IR) ...\\
+Os tipos das fontes de dados acessadas têm forte influência sobre as arquiteturas que serão utilizadas na implementação dos sistemas que se propõem tratar problemas do tipo QA. Existem 3 principais paradigmas para tratar problemas do tipo QA: "Information Retrieval" (IR), "Knowledge Based" (KB) e Híbridas (HIB), respectivamente para tipos de fontes de dados não estruturadas, estruturadas e híbridas \citep{speech}.\\
 
 São chamados de "Sistemas Question Answering Information Retrieval" (Sistemas QA-IR) os sistemas que se propõem tratar problemas do tipo QA e utilizam o paradigma IR para responder perguntas escritas em linguagem natural a partir de fontes de dados não estruturadas.\\
 
-Apresentar os principais componentes da arquitetura de Sistemas IR \citep{kolomiyets2011survey}. ACHEI ESSE ARTIGO QUE É DE 2017 E DE UM PERIÓDICO A1 (KNOWLEDGE-BASED SYSTEMS) COM APENAS 2 REFERÊNCIAS: A study about the future evaluation of Question-Answering systems (In this paper, we overview the main QA evaluations over free text, paying special attention to the changes encouraged at such campaigns). DAR UMA LIDA NELE!\\
+São chamados de "Sistemas Question Answering Knowledge Based" (Sistemas QA-KB) os sistemas que se propõem tratar problemas do tipo QA e utilizam o paradigma KB para responder perguntas escritas em linguagem natural a partir de fontes de dados estruturadas.\\
 
-O paradigma Knowledge Based (KB) ...\\
-
-São chamados de "Sistemas Question Answering Knowledge Based" (Sistemas QA-KB) os sistemas que se propõem tratar problemas do tipo QA e utilizam o paradigma KB para responder perguntas escritas em linguagem natural a partir de fontes de dados estruturadas. FALAR DA CONVERSÃO PARA FORMA LÓGICA\\
-
-Apresentar os principais componentes da arquitetura de Sistemas KB\\
-
-Uma especialização dos sistemas QA-KB são os sistemas Natural Language Interface to Database (NLIDB) que respondem perguntas escritas em linguagem natural a partir de bases de dados estruturadas relacionais [REF]. O estudo dos sistemas NLIDB é o foco desse trabalho.\\
-
-O paradigma Híbrido (HIB) ...\\
+Uma especialização dos sistemas QA-KB são os sistemas Natural Language Interface to Database (NLIDB) que respondem perguntas escritas em linguagem natural a partir de bases de dados estruturadas relacionais \citep{androutsopoulos1995natural}. O estudo dos sistemas NLIDB é o foco desse trabalho.\\
 
 São chamados de "Sistemas Question Answering Híbridos" (Sistemas QA-HIB) os sistemas que se propõem tratar problemas do tipo QA e utilizam o paradigma HIB para responder perguntas escritas em linguagem natural a partir de fontes de dados estruturadas e não estruturadas.\\
-
-Apresentar os principais componentes da arquitetura de Sistemas Híbridos.\\
 
 A figura \ref{fig:TiposDeSistemasQA} apresenta uma visão consolidada dos diferentes tipos de sistemas QA discutidos até agora.\\
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.3]{TiposDeSistemasQA.jpg}
-\caption{Tipos de sistemas QA [REDESENHAR. FIGURA FEIA.]}
+\caption{Tipos de sistemas QA}
 \label{fig:TiposDeSistemasQA}
 \end{figure}
 
-O objetivo desse trabalho é fazer um levantamento dos sistemas NLIDB. A seção \ref{sistemasKB} falará sobre os diferentes tipos de PROBLEMA (TROCAR EM TODAS AS PARTES DO TEXTO) QA KB. A seção \ref{exemplosSistemasKB} falará sobre exemplos de sistemas QA KB. Por fim, a seção \ref{conclusoes} apresenta as conclusões.
+O objetivo desse trabalho é fazer um levantamento dos sistemas NLIDB. Ele está organizado da seguinte forma: a seção \ref{sistemasNLIDB} detalha as características de sistemas NLIDB, a seção \ref{exemplosSistemasNLIDB} lista exemplos e características de sistemas NLIDB e, por fim, a seção\ref{conclusoes} apresenta as conclusões.
 
 %O objetivo desse trabalho é fazer um levantamento dos sistemas de QA que acessam bases de dados estruturadas (Sistemas KB ou NLIDB) para responder as perguntas do tipo factóide informadas pelos usuários em linguagem natural, independente do tipo de domínio (aberto ou fechado). A seção \ref{sistemasKB} falará sobre os diferentes tipos de PROBLEMA (TROCAR EM TODAS AS PARTES DO TEXTO) QA KB. A seção \ref{exemplosSistemasKB} falará sobre exemplos de sistemas QA KB. Por fim, a seção \ref{conclusoes} apresenta as conclusões.
 
@@ -114,80 +102,67 @@ O objetivo desse trabalho é fazer um levantamento dos sistemas NLIDB. A seção
 
 %Sistemas Híbridos...\\
 
-
-
 %===========================================================
 %===========================================================
 %===========================================================
 %===========================================================
-
-\section{Acho que preciso de uma seção sobre metodologia\label{metodologia}}
 
 %\section{Sistemas Question Answering Knowledge Based (QA-KB)\label{sistemasKB}}
 
 \section{Sistemas Natural Language Interface to Databases (NLIDB)\label{sistemasNLIDB}}
 
-O trabalho \citep{androutsopoulos1995natural} é uma introdução para o problema \textit{Natural Language Interface to DataBases} (NLIDB). Ele apresenta algumas vantagens e desvantagens dos modelos NLIDB quando comparados com linguagens formais de consultas a bancos de dados, por exemplo, SQL, interfaces baseadas em formulários e interfaces gráficas. Ele também discute questões arquiteturais e de portabilidade. \\
+Como apresentado na seção anterior, sistemas Natural Language Interfaces to Databases (NLIDB) são sistemas que tem como objetivo converter consultas escritas em linguagem natural para consultas que serão executadas sobre bases de dados relacionais.
 
-Sistemas NLIDB recebem consultas em linguagem natural e retornam resultados a partir de fontes de dados estruturadas relacionais. Implementações desse tipo de sistemas podem ser classificadas como: baseado em gramática, baseado em regras, baseado em síntese de programas e baseado em redes neurais\citep{speech}.\\
+Os primeiros sistemas NLIDB foram propostos nos anos 60 e já representavam uma grande mudança da forma de acessar as bases de dados quando comparados com sistemas que utilizavam linguagens formais de consultas, por exemplo, SQL, ou sistemas com interfaces baseadas em formulários \citep{androutsopoulos1995natural}.
 
-[Existe algo para mais de uma tabela? Pode ser um diferencial! Talvez possa falar aqui que uma limitação é que todas as abordagens utilizam uma única tabela.]\\
+%\citep{androutsopoulos1995natural} é uma introdução para o problema \textit{Natural Language Interface to DataBases} (NLIDB). Ele apresenta algumas vantagens e desvantagens dos modelos NLIDB quando comparados com linguagens formais de consultas a bancos de dados, por exemplo, SQL, interfaces baseadas em formulários e interfaces gráficas. Ele também discute questões arquiteturais e de portabilidade. \\
 
-[LER ESSE ARTIGO
-Knowledge-based question answering using the semantic embedding space https://www.sciencedirect.com/science/article/pii/S0957417415004698]
+Considerando como base a classificação de modelos NLIDB proposto por \citep{androutsopoulos1995natural}, este trabalho propõe uma nova classificação com o objetivo de refletir as técnicas que surgiram desde a criação da classificação original e as técnias que ainda permanecem. Dessa forma, os sistemas NLIDB podem ser classificados como: baseados em gramática, baseados em regras, baseados em síntese de programas e baseados em redes neurais. A figura \ref{fig:SistemaNLIDB} apresenta tipos de implementações/soluções de sistemas NLIDB discutidas anteriormente.\\
+
+%[Existe algo para mais de uma tabela? Pode ser um diferencial! Talvez possa falar aqui que uma limitação é que todas as abordagens utilizam uma única tabela.]\\
+
+%[LER ESSE ARTIGO Knowledge-based question answering using the semantic embedding space https://www.sciencedirect.com/science/article/pii/S0957417415004698]
 
 
-A figura \ref{fig:SistemaNLIDB} apresenta tipos de implementações/soluções de sistemas NLIDB discutidas anteriormente.
+
 
 %exemplo de figura
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.7]{NLIDB.JPG}
-\caption{Tipos de implementações/soluções de sistemas NLIDB [REDESENHAR. FIGURA FEIA.]}
+\caption{Tipos de implementações/soluções de sistemas NLIDB}
 \label{fig:SistemaNLIDB}
 \end{figure}
 
 \subsection{Sistemas NLIDB baseados em gramáticas}
 
-Explicar o que são sistemas NLIDB baseados em gramáticas.
+Em sistemas baseados em gramáticas a pergunta do usuário é analisada sintaticamente (parsing) e a "parse tree" resultante é mapeada para uma expressão escrita em linguagem de consulta de algum banco de dados. 
+
+Sistemas baseados em gramáticas usam uma gramática que descrever as possíveis estruturas sintáticas para a pergunta do usuário.
+
+Existem algumas variações dessa técnica, por exemplo, "Semantic Grammar Systems" onde a pergunta do usuário continua passando pelo processo de parsing, mas às categorias das gramáticas (os nós que não são folhas da parse tree) são adicionados termos sobre o domínio de conhecimento em questão.
 
 \subsection{Sistemas NLIDB baseados em regras}
 
-Explicar o que são sistemas NLIDB baseados em regras\\
+Para o caso de relações muito frequentes é possível definir um conjunto de regras que serão utilizadas para processar a pergunta escrita em linguagem natural pelo usuário. Por exemplo, sempre que aparecer a palavra "capital" próxima a uma palavra que represente o nome de um país (<PAIS>), execute a consulta "SELECT CAPITAL FROM PAISES WHERE NOME=<PAIS>".
 
 \subsection{Sistemas NLIDB baseados em Síntese de Programas}
 
-Explicar o que são sistemas NLIDB baseados em Síntese de Programas\\
+%TODO0: PEGAR ARTIGOS DO GIT
+
+%https://alexpolozov.com/blog/program-synthesis-2018/
+
+%Survey de síntese de programas: https://www.microsoft.com/en-us/research/wp-content/uploads/2017/10/program_synthesis_now.pdf
+
+%https://homes.cs.washington.edu/~bornholt/post/synthesis-explained.html
+
+Síntese de programas é a tarefa de automaticamente encontrar um progrmama na linguagem de programação de interesse que satisfaça as intenções do usuário expressadas na forma de uma especificação \citep{gulwani2017program}.
+
+Dessa forma, é possível utilizar a técnica de Síntese de Programas para problemas NLIDB. Nesse caso, a especificação é a pergunta escrita em linguagem natural e o programa gerado é a consulta SQL.
 
 \subsection{Sistemas NLIDB baseados em Redes Neurais}
 
-Explicar o que são sistemas NLIDB baseados em Redes Neurais\\
-
-
-TODO0: PEGAR ARTIGOS DO GIT
-
-TODO1: Escrever o que li sobre síntese de programas para criar um ou dois parágrafos.
-
-\citep{gulwani2017program}
-\citep{yaghmazadeh2017sqlizer}
-
-https://alexpolozov.com/blog/program-synthesis-2018/
-Survey de síntese de programas: https://www.microsoft.com/en-us/research/wp-content/uploads/2017/10/program_synthesis_now.pdf
-
-https://homes.cs.washington.edu/~bornholt/post/synthesis-explained.html
-
-
-
-
-
-
-
-
-Falar das soluções baseadas em redes neurais (também chamados de NL2SQL e Text-to-SQL) [ACREDITO QUE NÃO PRECISA CRIAR UMA SUBSEÇÃO PARA ISSO].\\
-
-[Olhar blog de síntese de programas da Aline. quais as relações com as redes neurais? Existe SP co ML e sem ML.]. 1 - program synthesis: https://alexpolozov.com/blog/program-synthesis-2018/ ele fala do survey que eu mencionei, e ele menciona o dataset WikiSQL, na parte de datasets.
-
-
+Sistemas NLIDB modernos utilizam redes neurais em suas arquiteturas. Por exemplo, modelos NLIDB que utilizam a técnica SEQ2SEQ [REF] são chamados de modelos NL2SQL [REF] ou Text-to-SQL [REF].
 
 %===========================================================
 %===========================================================
@@ -196,9 +171,15 @@ Falar das soluções baseadas em redes neurais (também chamados de NL2SQL e Tex
 
 \section{Levantamento de Sistemas NLIDB\label{exemplosSistemasNLIDB}}
 
+Colocar no início dessa seção a explicação/discussão do motivo de eu ter separado antes e depois de 2008 os trabalhos.\\
+
+Também preciso escrever com ênfase quais são as limitações dos trabalhos. Quais são os trabalhos que aceitam queries em mais de uma tabela?\\
+
+Talvez seja muito difícil aprender mais de uma tabela do zero. Talvez eu possa criar algumas regras para ajudar mais de uma tabela, tipo uma muleta. Assim, o primeiro passo seria dado uma pergunta, quais tabelas devo utilizar. Aline comentou sobre Semantic Role Labeling.\\
+
 A seção \ref{sistemasNLIDB} apresentou os tipos de sistemas NLIDB, que são baseados em gramáticas, regras, síntese de programas e redes neurais. O objetivo dessa seção é apresentar exemplos de sistemas NLIDB.\\
 
-As seções \ref{velhos} e \ref{novos} apresentarão com detalhes os sistemas descritos na tabela abaixo \ref{table:exemplos}.
+A seção \ref{velhos} apresentará exemplos dos primeiros sistemas NLIDB e propostas sequentes. A seção \ref{novos} apresentará modelos propostos mais recentemente. A tabela \ref{table:exemplos} apresenta os sistemas que serão discutidos nas seções \ref{velhos} e \ref{novos}.
 
 %https://www.tablesgenerator.com/
 \begin{table}[]
@@ -214,9 +195,12 @@ d & d & d & d & d \\ \hline
 \label{table:exemplos}
 \end{table}
 
-\subsection{Trabalhos NLIDB antigos\label{velhos}}
+\subsection{Sistemas NLIDB propostos até 2008\label{velhos}}
 
 Protótipos de sistemas NLIDB apareceram no final dos anos 60. Nessa época, o NLIDB mais conhecido era LUNAR \citep{woods1973progress}, uma interface em linguagem natural para um banco de dados de análises químicas de rochas lunares. Esse sistema é concentrado em um domínio de informação. Era baseado em regras, sup ou semi-sup?\\
+
+%Sugestão Plastino
+Colocar o ano das referências. Se acontecer 2 em um mesmo ano, posso colocar em um único parágrafo...
 
 RENDEZVOUS \citep{codd1974seven} engajava os usuários em diálogos para ajudá-los a formular suas consultas. Domínio aberto ou fechado? Era baseado em regras, sup ou semi-sup?\\
 
@@ -236,21 +220,30 @@ Diversos outros sistemas apareceram nos anos 80, por exemplo DATALOG \citep{hafn
 
 De acordo com \citep{johnson1984natural} em 1987, tecnologias NLIDB seriam o padrão para usuários de DBMSs e haveria um conjunto de alternativas de produtos. Entretanto, essa previsão não se confirmou por alguns motivos: evolução das interfaces gráficas, ...\\
 
-Outros trabalhos mais recentes...\\
-
-A dissertação de mestrado \citep{chandra2006natural} propõe um modelo baseado em grafos. O sistema faz a coleta de todas as informações possíveis de bancos de dados e sentenças existentes, e transforma essas informações em uma base de conhecimento para o sistema. Dado uma nova pergunta, o sistema irá usar o conhecimento para analisar e traduzir a sentença em uma \textit{query} correspondente. \\
-
-O trabalho \cite{popescu2003towards} introduz a definição de "perguntas semanticamente tratáveis" e a implementação de um modelo chamado "PRECISE NLI". O modelo PRECISE funcionou muito bem com bases de testes de perguntas "semanticamente tratáveis". O problema é que esse tipo de pergunta exige que as perguntas sejam escritas respeitando um conjunto de regras, por exemplo, que um atributo venha sempre precedido de palavras como \textit{"What"} e \textit{"Who"}. Essa é uma grande limitação do modelo. \\
+Nos anos 2000 novos trabalhos foram propostos. Por exemplo, o trabalho \cite{popescu2003towards} introduz a definição de "perguntas semanticamente tratáveis" e a implementação de um modelo chamado "PRECISE NLI". O modelo PRECISE funcionou muito bem com bases de testes de perguntas "semanticamente tratáveis". O problema é que esse tipo de pergunta exige que as perguntas sejam escritas respeitando um conjunto de regras, por exemplo, que um atributo venha sempre precedido de palavras como \textit{"What"} e \textit{"Who"}. Essa é uma grande limitação do modelo. \\
 
 O trabalho \citep{minock2005phrasal} apresenta o modelo STED que tem a habilidade de entender e gerar frases em linguagem natural para engajar o usuário na clarificação dos diálogos quando há dúvidas na pergunta de entrada. \\
 
-Conforme o trabalho \citep{akula2013novel}, usuários falham em expressas suas intenções em apenas uma pergunta em linguagem natural. Assim, para responder uma sequência de perguntas em linguagem natural, sistemas NLIDB precisam capturar e manter o contexto do usuário. \\
+A dissertação de mestrado \citep{chandra2006natural} propõe um modelo baseado em grafos. O sistema faz a coleta de todas as informações possíveis de bancos de dados e sentenças existentes, e transforma essas informações em uma base de conhecimento para o sistema. Dado uma nova pergunta, o sistema irá usar o conhecimento para analisar e traduzir a sentença em uma \textit{query} correspondente. \\
+
+A Microsoft já teve seu produto NLIDB, chamado "Microsoft English Query", mas ele foi descontinuado em 2008 (https://www.infoq.com/news/English-Query-Discontinued). Esse foi um marco importante pois representou um movimento de desistência do tema de uma grande empresa do setor de tecnologia.\\
+
+A próxima seção apresentará modelos propostos após 2008.
+
+%================================
+%================================
+%================================
+%================================
+%================================
+%================================
+
+\subsection{Sistemas NLIDB propostos após 2008\label{novos}}
+
+%Wolfram Alpha \citpp{wolfram2013wolfram} é um exemplo interessante.
+
+Conforme o trabalho \citep{akula2013novel}, usuários falham em expressar suas intenções em apenas uma pergunta em linguagem natural. Assim, para responder uma sequência de perguntas em linguagem natural, sistemas NLIDB precisam capturar e manter o contexto do usuário. \\
 
 O trabalho \citep{li2014constructing} propõe o modelo NaLIR \\
-
-A Microsoft já teve seu produto NLIDB, chamado "Microsoft English Query", mas ele foi descontinuado em 2008 (https://www.infoq.com/news/English-Query-Discontinued).\\
-
-\subsection{Trabalhos NLIDB NOVOS\label{novos}}
 
 Mais recentemente novos modelos supervisionados baseados em Síntese de Programas e em Redes Neurais vem sendo propostos. Esses modelos serão detalhados a seguir.\\
 
@@ -289,15 +282,18 @@ O trabalho \citep{shi2018incsql} atualmente é o primeiro do ranking WikiSQL (18
 
 \section{Conclusões\label{conclusoes}}
 
-PROBLEMAS EM ABERTO\\
+Mais recentemente, em função do advento dos temas relacionados à inteligência artificial, esse tema voltou à pauta e novos modelos foram propostos, por exemplo, modelos baseados em redes neurais. Esse trabalho discutiu diferentes tipos de sistemas NLIDB e apontou pontos fortes e fracos.\\
 
-TENDÊNCIAS\\
+%Críticas aos outros trabalhos que o Plastino sugeriu
+Nos sistemas baseados em gramática a entrada não é livre. Grande parte dos sistemas trabalham com 1 única tabela. Nos sistemas baseados em regras, há necessidade de esforço inicial de especialistas para a criação das regras.\\
 
-Criar modelo para considerar mais de uma tabela?\\
+Como trabalhos futuros, temas relacionados à ambigüidade gerada por perguntas escritas em linguagem natural e a limitação de consultar apenas uma tabela por vez são importantes.\\
 
-Geração de linguagem intermediária? 2 - Universal Language Model, que foi publicado no ACL 2018: http://nlp.fast.ai/classification/2018/05/15/introducting-ulmfit.html.\\
+%PROBLEMAS EM ABERTO. TENDÊNCIAS\\
 
-3 - Vários problemas de NLP resolvidos com a mesma topologia de rede (baseada em atenção) do OpenAI: https://blog.openai.com/language-unsupervised/\\
+%Geração de linguagem intermediária? 2 - Universal Language Model, que foi publicado no ACL 2018: http://nlp.fast.ai/classification/2018/05/15/introducting-ulmfit.html.\\
+
+%3 - Vários problemas de NLP resolvidos com a mesma topologia de rede (baseada em atenção) do OpenAI: https://blog.openai.com/language-unsupervised/\\
 
 %===========================================================
 %===========================================================
